@@ -39,6 +39,64 @@ function Usuario(props) {
       });
   };
 
+  // Exercicio de Fixação
+
+  const editUser = (id) => {
+    
+    const headers = {
+      headers: {
+        Authorization: "henrique-louback-easley",
+      },
+    };
+  
+    const body = {
+      name: nome,
+      email: email,
+    };
+
+    axios
+      .put(
+        `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${id}/`, body,
+        headers
+      )
+      .then((response) => {
+        props.allUsersApi()
+        setEmail('')
+        setNome("")
+        setEditar(false)
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  };
+  
+  const deleteUser = (id) => {
+    const headers = {
+      headers: {
+        Authorization: "henrique-louback-easley",
+      },
+    };
+  
+    const body = {
+      name: nome,
+      email: email,
+    };
+
+    axios
+      .delete(
+        `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${id}/`,
+        headers
+      )
+      .then((response) => {
+        props.allUsersApi()
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        // console.log(error);
+      });
+  }
+
   return (
     <User>
       {editar ? (
@@ -47,7 +105,7 @@ function Usuario(props) {
           <p>E-mail: {usuario.email}</p>
           <input value={nome} onChange={(e) => setNome(e.target.value)} />
           <input value={email} onChange={(e) => setEmail(e.target.value)} />
-          <button>Enviar alterações</button>
+          <button onClick={()=>editUser(usuario.id)}>Enviar alterações</button>
         </div>
       ) : (
         <>
@@ -60,7 +118,7 @@ function Usuario(props) {
         </>
       )}
       <button onClick={() => setEditar(!editar)}>Editar</button>
-      <button>Excluir</button>
+      <button onClick={()=> deleteUser(usuario.id)}>Excluir</button>
     </User>
   );
 }
